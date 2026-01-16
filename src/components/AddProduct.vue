@@ -10,7 +10,7 @@
         <label for="price">Precio:</label>
         <input type="number" v-model="newProduct.price" required />
       </div>
-      <button type="submit">Agregar</button>
+      <!-- <button type="submit">Agregar</button> -->
     </form>
   </div>
 </template>
