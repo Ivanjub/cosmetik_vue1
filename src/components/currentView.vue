@@ -31,7 +31,7 @@
     <p><strong>Fono:</strong> <a href="tel:+56989646126">+56 9 8964 6126</a></p>
 
     <a
-  href="https://wa.me/56989646126"
+  href="https://wa.me/+56989646126"
   target="_blank"
   style="display:inline-flex;align-items:center;
          background:#25D366;color:#fff;
