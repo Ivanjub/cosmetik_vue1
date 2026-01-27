@@ -4,6 +4,8 @@
     <nav class="menu">
       <button @click="currentView = 'list'">Productos</button>
       <button @click="currentView = 'add'">Agregar producto</button>
+      <button @click="currentView = 'Bolsos'">MostrarProd</button>
+      <button @click="currentView = 'Tarjetaproduct'">Tarjeta producto</button>
     </nav>
 
     <!-- CONTENIDO -->
@@ -15,18 +17,48 @@
     <AddProduct
       v-if="currentView === 'add'"
       @product-added="handleProductAdded"
-    />
+    />    
+    
   </div>
+  <br>
+  <br>
+  
+  <footer id="footer">
+  <p>© Sistema 2026</p>
+
+  <div class="contacto">
+    <h4>Contacto</h4>
+    <p><strong>Fono:</strong> <a href="tel:+56989646126">+56 9 8964 6126</a></p>
+
+    <a
+  href="https://wa.me/56912345678"
+  target="_blank"
+  style="display:inline-flex;align-items:center;
+         background:#25D366;color:#fff;
+         padding:10px 16px;border-radius:6px;
+         text-decoration:none;font-weight:600;"
+>
+  <img
+    src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
+    width="20"
+    style="margin-right:8px"
+  />
+  Contactar por WhatsApp
+</a>
+
+    <p><strong>Email:</strong> 
+      <a href="mailto:ivan.guerrero@sistventas.cl">
+        ivan.guerrero@sistemaventas.cl
+      </a>
+    </p>
+  </div>
+</footer>    
+
 </template>
 
 <script>
 
-// console.log('DB:', db)
-
-//importar colección, agregar documentos y obtener documentos
-import { collection, addDoc, getDocs } from 'firebase/firestore'
-import { db } from '../firebase'//importar la conexión
-
+import { supabase } from '../supabase'
 import ProductList from './ProductList.vue'
 import AddProduct from './AddProduct.vue'
 
@@ -35,10 +67,12 @@ import AddProduct from './AddProduct.vue'
 
 export default {
   name: 'App', //cambio App a currentView para evitar conflicto con currentView.vue
+  
   components: {
-    ProductList,
+    ProductList,    
     AddProduct
   },
+  
   data() {
     return {
       products: [],
@@ -48,32 +82,37 @@ export default {
   },
 
   async mounted() {
-    try{
-  const querySnapshot = await getDocs(collection(db, 'products'))
-  // console.log('DOCS', querySnapshot.docs)
-
-  this.products = querySnapshot.docs.map(doc => ({id: doc.id, ...doc.data()}))
-  // console.log('PRODUCTOS', this.products)
-
-    } catch (error) {
-      console.error('Error al obtener los productos:', error)
-    }
+    
+      const { data, error } = await supabase
+      .from('products')
+      .select('*')
+  // const querySnapshot = await getDocs(collection(db, 'products'))
+  // this.products = querySnapshot.docs.map(doc => ({id: doc.id, ...doc.data()})) 
+      
+      if (error) {
+        console.error(error)
+      return
+    }      
+      this.products = data    
 },
 
   methods: {
-  
-  //metodo para manejar el evento guardar productos en la base de datos
-  async handleProductAdded(product) {
-    const docRef = await addDoc(collection(db, 'products'), {
-      name: product.name,
-      price: product.price
-    })
 
-    this.products.push({id: docRef.id, ...product})
+    
+  
+
+  //metodo para manejar el evento guardar productos en la base de datos
+  async handleProductAdded() {
+    // const docRef = await addDoc(collection(db, 'products'), {
+    //   name: product.name,
+    //   price: product.price
+    // })
+
+    // this.products.push({id: docRef.id, ...product})
 
     this.currentView = 'list'
   }
-} 
+}
 }
 
 </script>
@@ -99,4 +138,23 @@ export default {
 .menu button:hover {
   background: #ffe3ef;
 }
+
+#footer {
+  background: #111;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+}
+
+#footer a {
+  color: #4fc3f7;
+  text-decoration: none;
+}
+
+.contacto {
+  margin-top: 10px;
+}
+
+
+
 </style>
