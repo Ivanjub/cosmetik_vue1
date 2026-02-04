@@ -1,9 +1,10 @@
 <template>
   <div id="app">
     <section class="section1">
-    <h1>Bienvenido a mi tienda</h1>
+    <h1>Bienvenido a Tienda Boutique</h1>
     <a href="index.html">
     <img class="logo" src="./assets/boutique.jpg" alt="Logo"></a>
+    <!-- <img class="build" src="./assets/bajo-construcción-18685929.webp" alt="building"> -->
     </section>
 
     <CurrentView></CurrentView>
@@ -46,6 +47,18 @@ h1 {
   width: 150px;
   height: auto;
   display: left;
+  margin: 0 auto;
+}
+
+.build {
+  position: relative;
+  margin-top: 30px;
+  bottom: 70px;
+  left: 1400px;
+  right: 90px;
+  width: 150px;
+  height: auto;
+  display: right;
   margin: 0 auto;
 }
 

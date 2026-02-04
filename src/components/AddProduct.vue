@@ -13,93 +13,92 @@
         <textarea v-model="description"></textarea>
       
         <label for="image">URL de la Imagen: </label>
-        <input type="file" @change="onFileChange" accept="image/*" />
+        <input type="file" multiple @change="onFilesSelected" accept="image/*" />
       
-      <button type="submit">Guardar Producto</button>
+      <button type="submit">GUARDAR PRODUCTO</button>
     </form>
   </div>
 </template>
 
-<script>
+<script setup>
+ 
+import { ref } from 'vue'
+import { supabase } from '../supabase'
 
-  import { supabase } from '../supabase'
-  
-  
-export default {
-  name: 'AddProduct',
-  data() {
-    return {
-        name: '',
-        price: 0,
-        description: '',
-        imageFile: null
-      
-    }
-  },
+const name = ref('')
+const price = ref(0)
+const description = ref('')
+const selectedFiles = ref([])
 
-  methods: {
+const onFilesSelected = (e) => {
+  selectedFiles.value = Array.from(e.target.files)
+}
 
-    onFileChange(e) {
-      this.imageFile = e.target.files[0]
-    },
+const uploadImages = async (productId) => {
+  const paths = []
 
-    async addProduct() {
+  for (const file of selectedFiles.value) {
+    const filePath = `productos/${productId}/${Date.now()}-${file.name}`
 
-      let imageUrl = 'sin imagen'
+    const { error } = await supabase.storage
+      .from('product-images') // 👈 nombre del bucket
+      .upload(filePath, file)
 
-      // Subir la imagen a Supabase Storage
-      // 1️⃣ Subir imagen (si hay)
-      if (this.imageFile) {
-        const fileExt = this.imageFile.name.split('.').pop()
-        const fileName = `${Date.now()}.${fileExt}`
+    if (error) throw error
 
-        const { error: uploadError } = await supabase.storage
-          .from('products')
-          .upload(fileName, this.imageFile)
-
-        if (uploadError) {
-          console.error('Error subiendo imagen:', uploadError)
-          return
-        }
-
-        // 2️⃣ Obtener URL pública
-        const { data } = supabase.storage
-          .from('products')
-          .getPublicUrl(fileName)
-
-        imageUrl = data.publicUrl
-      }
-
-      // 3️⃣ Guardar producto en DB
-      const { error } = await supabase
-        .from('products')
-        .insert([
-          {
-            name: this.name,
-            price: this.price,
-            description: this.description,
-            image: imageUrl
-          }
-        ])
-
-        if (error) {
-        console.error('Error guardando producto:', error)
-        return
-      }
-
-      alert('Producto Guardado')
-
-      // limpiar
-      this.name = ''
-      this.price = 0
-      this.description = ''
-      this.imageFile = null
-
-    }
+    paths.push(filePath)
   }
+
+  return paths
+}
+
+const addProduct = async () => {
+  // 1️⃣ crear producto
+  const { data: product, error: insertError } = await supabase
+    .from('products')
+    .insert({
+      name: name.value,
+      price: price.value,
+      description: description.value,
+      images: []
+    })
+    .select()
+    .single()
+
+  if (insertError) {
+    console.error('Error creando producto:', insertError)
+    return
+  }
+
+  // 2️⃣ subir imágenes
+  const imagePaths = await uploadImages(product.id)
+
+  console.log('IMAGES UPLOADED:', imagePaths)
+
+  // 3️⃣ actualizar producto
+  const { error: updateError } = await supabase
+    .from('products')
+    .update({ images: imagePaths })
+    .eq('id', product.id)
+
+  if (updateError) {
+    console.error('Error actualizando imágenes:', updateError)
+    return
+  }
+
+  console.log('IMAGES GUARDADAS:', imagePaths)
+
+  alert('Producto guardado')
+
+  // 4️⃣ limpiar formulario
+  name.value = ''
+  price.value = 0
+  description.value = ''
+  selectedFiles.value = []
 }
 
 </script>
+
 
 <style scoped>
 .add-product {

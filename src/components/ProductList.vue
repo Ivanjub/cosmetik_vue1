@@ -3,11 +3,10 @@
     <h2>Productos Disponibles</h2>
     
     <div class="grid">
-      <ProductCard v-for="product in products"
-      :key="product.id"
+      <ProductCard v-for="product in products" :key="product.id"
       :product="product"
       @add="handleAdd" />
-    </div>       
+    </div>
   
 </template>
 

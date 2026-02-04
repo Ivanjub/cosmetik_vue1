@@ -1,26 +1,34 @@
 <template>
+
   <div id="app">
+
     <!-- MENÚ -->
     <nav class="menu">
-      <button @click="currentView = 'list'">Productos</button>
+      
+      <button @click="currentView = 'bolsos'">Bolsos</button>
+      <button @click="currentView = 'cosmeticos'">Cosméticos</button>
+      <button @click="currentView = 'tira'">Tira</button>            
       <button @click="currentView = 'add'">Agregar producto</button>
-      <button @click="currentView = 'Bolsos'">MostrarProd</button>
-      <button @click="currentView = 'Tarjetaproduct'">Tarjeta producto</button>
+      
     </nav>
 
     <!-- CONTENIDO -->
     <ProductList
-      v-if="currentView === 'list'"
+      v-if="currentView === 'bolsos'"
       :products="products"
     />
 
     <AddProduct
       v-if="currentView === 'add'"
       @product-added="handleProductAdded"
-    />    
-    
+    />
+
+    <TiraImagen
+      v-if="currentView === 'tira'"
+      :products="products"
+    />
+
   </div>
-  <br>
   <br>
   
   <footer id="footer">
@@ -61,22 +69,21 @@
 import { supabase } from '../supabase'
 import ProductList from './ProductList.vue'
 import AddProduct from './AddProduct.vue'
-
-// import { version } from 'vue'
-// console.log('Vue version:', version)
+import TiraImagen from './tiraImagen.vue'
 
 export default {
   name: 'App', //cambio App a currentView para evitar conflicto con currentView.vue
   
   components: {
-    ProductList,    
+    ProductList,
+    TiraImagen,
     AddProduct
   },
   
   data() {
     return {
       products: [],
-      currentView: 'list'
+      currentView: 'bolsos' // 'list' | 'add' | 'bolsos' | 'cosmeticos'
       
     }
   },
@@ -85,9 +92,7 @@ export default {
     
       const { data, error } = await supabase
       .from('products')
-      .select('*')
-  // const querySnapshot = await getDocs(collection(db, 'products'))
-  // this.products = querySnapshot.docs.map(doc => ({id: doc.id, ...doc.data()})) 
+      .select('*')  
       
       if (error) {
         console.error(error)
@@ -96,22 +101,9 @@ export default {
       this.products = data    
 },
 
-  methods: {
-
-    
-  
-
+  methods: { 
   //metodo para manejar el evento guardar productos en la base de datos
-  async handleProductAdded() {
-    // const docRef = await addDoc(collection(db, 'products'), {
-    //   name: product.name,
-    //   price: product.price
-    // })
-
-    // this.products.push({id: docRef.id, ...product})
-
-    this.currentView = 'list'
-  }
+  async handleProductAdded() { this.currentView = 'list' }
 }
 }
 
@@ -154,7 +146,6 @@ export default {
 .contacto {
   margin-top: 10px;
 }
-
 
 
 </style>
