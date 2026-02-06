@@ -8,12 +8,12 @@
       <button @click="currentView = 'bolsos'">Bolsos</button>
       <button @click="currentView = 'cosmeticos'">Cosméticos</button>
 
-    <ul>
+    <!-- <ul>
       <li><router-link to="/cosmeticos">Todos</router-link></li>
       <li><router-link to="/cosmeticos/maquillaje">Maquillaje</router-link></li>
       <li><router-link to="/cosmeticos/facial">Cuidado Facial</router-link></li>
       <li><router-link to="/cosmeticos/capilar">Cuidado Capilar</router-link></li>
-    </ul>
+    </ul> -->
 
       <button @click="currentView = 'tira'">Otros</button>            
       <button v-if="isDev" @click="currentView = 'add'">Agregar producto</button>
@@ -79,7 +79,7 @@
 
 <script setup>
 
-const isDev = true //cambiar a false en produccion
+const isDev = process.env.NODE_ENV === 'development'
 
 </script>
 
