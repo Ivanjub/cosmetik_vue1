@@ -16,7 +16,7 @@
     </ul>
 
       <button @click="currentView = 'tira'">Otros</button>            
-      <button v-if="isDev === false" @click="currentView = 'add'">Agregar producto</button>
+      <button v-if="isDev" @click="currentView = 'add'">Agregar producto</button>
 
       
       
@@ -78,8 +78,12 @@
 </template>
 
 <script setup>
-        const isDev = process.env.MODE === 'development' // Solo muestra el botón en desarrollo
+
+const isDev = true //cambiar a false en produccion
+
 </script>
+
+
 
 <script>
 
