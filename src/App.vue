@@ -1,13 +1,16 @@
 <template>
-  <div id="app">
+
+  <div>
     <section class="section1">
     <h1>Bienvenido a Tienda Boutique</h1>
-    <a href="index.html">
-    <img class="logo" src="./assets/boutique.jpg" alt="Logo"></a>
-    <!-- <img class="build" src="./assets/bajo-construcción-18685929.webp" alt="building"> -->
+    <a href="index.html">      
+    <img class="logo" src="./assets/boutique.png" alt="Logo"></a>
+
+    <img class="build" src="./assets/imgbuild.png" alt="En Construcción">    
+
     </section>
 
-    <CurrentView></CurrentView>
+    <CurrentView />
     
   </div>
 </template>
@@ -24,7 +27,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 /* Aquí puedes agregar estilos globales */
 .section1 {
   background-color: #f5f5f5;
@@ -33,6 +36,8 @@ export default {
   padding: 0px;
   margin-bottom: 20px;
   border-radius: 8px;
+  justify-content: flex-end;
+  ;
 }
 h1 {
   text-align: center;
@@ -42,24 +47,20 @@ h1 {
 }
 .logo {  
   position: relative;
-  bottom: 30px;
-  left: 90px;
-  width: 150px;
-  height: auto;
+  bottom: 50px;
+  left: 250px;
+  width: 200px;
+  /* height: auto; */
   display: left;
-  margin: 0 auto;
+;
 }
-
 .build {
-  position: relative;
-  margin-top: 30px;
-  bottom: 70px;
-  left: 1400px;
-  right: 90px;
-  width: 150px;
-  height: auto;
-  display: right;
-  margin: 0 auto;
+  width: 280px;
+  float: right;
+  margin-top: -80px;
+  margin-right: 90px;
+  
+  /* float: right; */
 }
 
 </style>

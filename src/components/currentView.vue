@@ -7,12 +7,23 @@
       
       <button @click="currentView = 'bolsos'">Bolsos</button>
       <button @click="currentView = 'cosmeticos'">Cosméticos</button>
-      <button @click="currentView = 'tira'">Tira</button>            
-      <button @click="currentView = 'add'">Agregar producto</button>
+
+    <ul>
+      <li><router-link to="/cosmeticos">Todos</router-link></li>
+      <li><router-link to="/cosmeticos/maquillaje">Maquillaje</router-link></li>
+      <li><router-link to="/cosmeticos/facial">Cuidado Facial</router-link></li>
+      <li><router-link to="/cosmeticos/capilar">Cuidado Capilar</router-link></li>
+    </ul>
+
+      <button @click="currentView = 'tira'">Otros</button>            
+      <button v-if="isDev === false" @click="currentView = 'add'">Agregar producto</button>
+
+      
       
     </nav>
 
     <!-- CONTENIDO -->
+     <div class="contenedor">
     <ProductList
       v-if="currentView === 'bolsos'"
       :products="products"
@@ -28,12 +39,13 @@
       :products="products"
     />
 
+    </div>
+
   </div>
   <br>
   
   <footer id="footer">
-  <p>© Sistema 2026</p>
-
+  
   <div class="contacto">
     <h4>Contacto</h4>
     <p><strong>Fono:</strong> <a href="tel:+56989646126">+56 9 8964 6126</a></p>
@@ -59,10 +71,15 @@
         ivan.guerrero@sistemaventas.cl
       </a>
     </p>
+    <p>© Sistema 2026 - Creado por <a href="">SoporteAFTA</a>- Desarrollo web</p>
   </div>
 </footer>    
 
 </template>
+
+<script setup>
+        const isDev = process.env.MODE === 'development' // Solo muestra el botón en desarrollo
+</script>
 
 <script>
 
@@ -147,5 +164,11 @@ export default {
   margin-top: 10px;
 }
 
+.contenedor {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 0 15px;
+  align-content: center;
+}
 
 </style>

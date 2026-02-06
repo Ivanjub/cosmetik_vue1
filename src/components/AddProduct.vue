@@ -2,6 +2,13 @@
   <div class="add-product">
     <h3>Agregar Nuevo Producto</h3>
     <form @submit.prevent="addProduct">
+
+      <select v-model="categoria">
+        <option value="bolsos">Bolsos</option>
+        <option value="maquillaje">Maquillaje</option>
+        <option value="facial">Cuidado Facial</option>
+        <option value="capilar">Cuidado Capilar</option>
+      </select>
       
         <label for="name">Nombre: </label>
         <input type="text" v-model="name" required />

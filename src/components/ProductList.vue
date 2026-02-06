@@ -35,6 +35,7 @@ export default {
 }
 
 h2 {
+  
   color: #2c3e50;
   text-align: center;
 }

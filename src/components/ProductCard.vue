@@ -4,14 +4,21 @@
 
     <!-- Swiper de imágenes -->
     <swiper
-      v-if="images.length"            
+      v-if="images.length"
       :slides-per-view="1"
+      loading="lazy"
       :modules="[Pagination]"
       pagination
-      class="product-swiper"
-    >
+      class="product-swiper" >
+
       <swiper-slide v-for="img in images" :key="img">
-        <img :src="img" />
+        <img :src="img"
+        loading="lazy"
+        decoding="async"
+        alt="Producto"
+        class="swiper-lazy" />
+
+        <div class="swiper-lazy-preloader"></div>
       </swiper-slide>
     </swiper>
 
@@ -38,6 +45,7 @@ import { Pagination } from 'swiper/modules'
 
 import 'swiper/css'
 import 'swiper/css/pagination'
+import 'swiper/css/navigation'
 
 import { getPublicImage } from '../supabase'
 
@@ -47,6 +55,7 @@ export default {
     Swiper,
     SwiperSlide
   },
+
   props: {
     product: {
       type: Object,
@@ -56,7 +65,7 @@ export default {
 
   setup() {
     return {
-      Pagination
+      Pagination      
     }
   },
 
@@ -79,6 +88,7 @@ export default {
   background: #fff;
   box-shadow: 0 4px 10px rgba(0,0,0,.1);
   text-align: center;
+   
 }
 
 img {
@@ -108,5 +118,11 @@ button {
   height: 300px;
   object-fit: flex;
 }
+
+.swiper-lazy-preloader {
+  width: 24px;
+  height: 24px;
+}
+
 
 </style>
